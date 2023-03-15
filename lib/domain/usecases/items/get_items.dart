@@ -11,7 +11,8 @@ class GetItemsParams {
 }
 
 class GetItems
-    implements Usecase<GetItemsParams, Either<Failure, List<ItemEntity>>> {
+    implements
+        Usecase<GetItemsParams, Future<Either<Failure, List<ItemEntity>>>> {
   GetItems(this._itemRepository);
   final ItemRepository _itemRepository;
 
