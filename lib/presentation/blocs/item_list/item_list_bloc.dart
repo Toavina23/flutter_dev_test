@@ -10,7 +10,7 @@ part 'item_list_event.dart';
 part 'item_list_state.dart';
 
 class ItemListBloc extends Bloc<ItemListEvent, ItemListState> {
-  final int itemPerPage = 5;
+  final int itemPerPage = 8;
   final GetItems _getItems;
   ItemListBloc(this._getItems) : super(const ItemListState()) {
     on<FetchItemList>(_onFetchItemList);
