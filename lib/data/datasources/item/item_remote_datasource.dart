@@ -7,13 +7,20 @@ import 'package:flutter_dev_test/utils/exceptions.dart';
 
 class ItemRemoteDatasource extends ItemDatasource {
   @override
-  Future<List<ItemModel>> fetchItems(int start, int limit) async {
+  Future<List<ItemModel>> fetchItems(
+      int start, int limit, String nameFilter) async {
     BaseOptions options =
         BaseOptions(baseUrl: "http://jsonplaceholder.typicode.com");
     Dio dio = Dio(options);
+    Map<String, dynamic> queryParams = {
+      "_start": start,
+      "_limit": limit,
+    };
+    if (nameFilter.isNotEmpty) {
+      queryParams.addAll({"title_like": nameFilter.trim()});
+    }
     try {
-      var response = await dio
-          .get("/photos", queryParameters: {"_start": start, "_limit": limit});
+      var response = await dio.get("/photos", queryParameters: queryParams);
       List<ItemModel> itemsModel = [];
       itemsModel.addAll((response.data as List<dynamic>).map((row) {
         return ItemModel.fromApi(row as Map<String, dynamic>);

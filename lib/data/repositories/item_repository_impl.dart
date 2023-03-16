@@ -11,10 +11,10 @@ class ItemRepositoryImpl implements ItemRepository {
   final ItemDatasource _itemDatasource;
   @override
   Future<Either<Failure, List<ItemEntity>>> getItems(
-      int start, int limit) async {
+      int start, int limit, String nameFilter) async {
     try {
       List<ItemModel> itemModels =
-          await _itemDatasource.fetchItems(start, limit);
+          await _itemDatasource.fetchItems(start, limit, nameFilter);
       return right(itemModels.map((model) => model.toEntity()).toList());
     } on HttpException catch (e) {
       return left(NetworkFailure(e.message));

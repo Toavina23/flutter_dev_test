@@ -5,9 +5,10 @@ import 'package:flutter_dev_test/domain/usecases/usecase.dart';
 import 'package:flutter_dev_test/utils/failures.dart';
 
 class GetItemsParams {
-  GetItemsParams(this.start, this.limit);
+  GetItemsParams(this.start, this.limit, this.nameFilter);
   final int start;
   final int limit;
+  final String nameFilter;
 }
 
 class GetItems
@@ -18,7 +19,8 @@ class GetItems
 
   @override
   execute(params) async {
-    var items = await _itemRepository.getItems(params.start, params.limit);
+    var items = await _itemRepository.getItems(
+        params.start, params.limit, params.nameFilter);
     return items;
   }
 }
