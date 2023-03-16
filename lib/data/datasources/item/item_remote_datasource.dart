@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_dev_test/data/datasources/item/item_datasource.dart';
 import 'package:flutter_dev_test/data/models/item_model.dart';

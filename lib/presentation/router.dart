@@ -7,7 +7,7 @@ var router = GoRouter(routes: [
   GoRoute(
     path: '/',
     builder: (context, state) {
-      context.read<ItemListBloc>().add(FetchItemList());
+      context.read<ItemListBloc>().add(const FetchItemList());
       return const ItemsList();
     },
   )
