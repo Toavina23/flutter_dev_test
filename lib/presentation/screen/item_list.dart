@@ -34,36 +34,47 @@ class _ItemsListState extends State<ItemsList> {
       () {
         var nextPageTrigger = 0.95 * _scrollController.position.maxScrollExtent;
         if (nextPageTrigger < _scrollController.position.pixels) {
-          itemListBlock.add(FetchItemList());
+          itemListBlock.add(
+              FetchItemList(searchTitle: _titleFilterController.value.text));
         }
       },
     );
+    _titleFilterController.addListener(() {
+      if (_titleFilterController.value.text.isEmpty) {
+        itemListBlock.add(const FetchItemList());
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text("My items"),
         bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48),
-            child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            fillColor: Colors.grey.shade100,
-                            filled: true,
-                            hintText: "Please enter search text"),
-                        controller: _titleFilterController,
-                      ),
-                    ),
-                    IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.search)),
-                  ],
-                ))),
+          preferredSize: const Size.fromHeight(48),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            color: Colors.white,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        contentPadding: const EdgeInsets.only(left: 10),
+                        fillColor: Colors.grey.shade100,
+                        filled: true,
+                        hintText: "Please enter search text"),
+                    controller: _titleFilterController,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      itemListBlock.add(
+                          FilterItemList(_titleFilterController.value.text));
+                    },
+                    icon: const Icon(Icons.search)),
+              ],
+            ),
+          ),
+        ),
       ),
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
