@@ -19,31 +19,37 @@ class _ItemsListState extends State<ItemsList> {
     super.initState();
     _scrollController = ScrollController();
     _titleFilterController = TextEditingController();
+    _scrollController.addListener(_onScroll);
+    _titleFilterController.addListener(_onInputChange);
+  }
+
+  _onScroll() {
+    var nextPageTrigger = 0.95 * _scrollController.position.maxScrollExtent;
+    if (_scrollController.offset >= nextPageTrigger &&
+        context.read<ItemListBloc>().state.status == ItemListStatus.loaded) {
+      context
+          .read<ItemListBloc>()
+          .add(FetchItemList(searchTitle: _titleFilterController.value.text));
+    }
+  }
+
+  _onInputChange() {
+    if (_titleFilterController.value.text.isEmpty) {
+      context.read<ItemListBloc>().add(const FetchItemList());
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _titleFilterController.removeListener(_onInputChange);
+    _titleFilterController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var itemListBlock = context.read<ItemListBloc>();
-    _scrollController.addListener(
-      () {
-        var nextPageTrigger = 0.95 * _scrollController.position.maxScrollExtent;
-        if (nextPageTrigger < _scrollController.position.pixels) {
-          itemListBlock.add(
-              FetchItemList(searchTitle: _titleFilterController.value.text));
-        }
-      },
-    );
-    _titleFilterController.addListener(() {
-      if (_titleFilterController.value.text.isEmpty) {
-        itemListBlock.add(const FetchItemList());
-      }
-    });
     return Scaffold(
       appBar: AppBar(
         title: const Text("My items"),
@@ -67,7 +73,7 @@ class _ItemsListState extends State<ItemsList> {
                 ),
                 IconButton(
                     onPressed: () {
-                      itemListBlock.add(
+                      context.read<ItemListBloc>().add(
                           FilterItemList(_titleFilterController.value.text));
                     },
                     icon: const Icon(Icons.search)),
@@ -79,7 +85,7 @@ class _ItemsListState extends State<ItemsList> {
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
           child: BlocBuilder<ItemListBloc, ItemListState>(
-            bloc: itemListBlock,
+            bloc: context.read<ItemListBloc>(),
             builder: (context, state) {
               if (state.status == ItemListStatus.loading &&
                   state.items.isEmpty) {
@@ -99,7 +105,8 @@ class _ItemsListState extends State<ItemsList> {
                         itemCount: itemsCount + 1,
                         itemBuilder: (_, index) {
                           int computedIndex = index;
-                          if (computedIndex == itemsCount) {
+                          if (computedIndex == itemsCount &&
+                              !state.bottomReached) {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
