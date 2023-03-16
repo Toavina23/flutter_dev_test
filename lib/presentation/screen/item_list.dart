@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dev_test/domain/entities/item_entity.dart';
 import 'package:flutter_dev_test/presentation/blocs/item_list/item_list_bloc.dart';
+import 'package:skeletons/skeletons.dart';
 
 class ItemsList extends StatefulWidget {
   const ItemsList({super.key});
@@ -50,21 +51,30 @@ class _ItemsListState extends State<ItemsList> {
                 );
               } else if (state.status == ItemListStatus.loaded) {
                 int itemsCount = state.items.length;
-                int startIndex = state.currentPage > 0 ? itemsCount : 0;
-                return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: itemsCount + 1,
-                  itemBuilder: (_, index) {
-                    int computedIndex = startIndex + index;
-                    if (computedIndex == itemsCount) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    ItemEntity currentItem = state.items[computedIndex];
-                    return ListTile(
-                        title: ItemComponent(
-                      item: currentItem,
-                    ));
-                  },
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 20,
+                        ),
+                        controller: _scrollController,
+                        itemCount: itemsCount + 1,
+                        itemBuilder: (_, index) {
+                          int computedIndex = index;
+                          if (computedIndex == itemsCount) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          ItemEntity currentItem = state.items[computedIndex];
+                          return ListTile(
+                              title: ItemComponent(
+                            item: currentItem,
+                          ));
+                        },
+                      ),
+                    ),
+                  ],
                 );
               } else if (state.status == ItemListStatus.failed) {
                 return Center(
@@ -84,12 +94,24 @@ class ItemComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      direction: Axis.vertical,
-      spacing: 3,
+    return Column(
+      key: key,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Image(image: NetworkImage(item.thumbnailUrl)),
-        Text(item.title),
+        Image(
+          image: NetworkImage(item.thumbnailUrl),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                item.title,
+                softWrap: true,
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
