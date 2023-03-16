@@ -13,11 +13,12 @@ class ItemsList extends StatefulWidget {
 
 class _ItemsListState extends State<ItemsList> {
   late ScrollController _scrollController;
-
+  late TextEditingController _titleFilterController;
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _titleFilterController = TextEditingController();
   }
 
   @override
@@ -38,7 +39,32 @@ class _ItemsListState extends State<ItemsList> {
       },
     );
     return Scaffold(
-      appBar: AppBar(title: const Text("My items")),
+      appBar: AppBar(
+        title: const Text("My items"),
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(48),
+            child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                color: Colors.white,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            contentPadding: const EdgeInsets.only(left: 10),
+                            fillColor: Colors.grey.shade100,
+                            filled: true,
+                            hintText: "Please enter search text"),
+                        controller: _titleFilterController,
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.search)),
+                  ],
+                ))),
+      ),
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
           child: BlocBuilder<ItemListBloc, ItemListState>(
