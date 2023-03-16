@@ -101,6 +101,17 @@ class ItemComponent extends StatelessWidget {
       children: [
         Image(
           image: NetworkImage(item.thumbnailUrl),
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (frame == null) {
+              return const SkeletonAvatar(
+                style: SkeletonAvatarStyle(
+                  height: 150,
+                  width: 150,
+                ),
+              );
+            }
+            return child;
+          },
         ),
         Row(
           children: [
