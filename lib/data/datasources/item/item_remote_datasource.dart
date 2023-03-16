@@ -4,13 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dev_test/data/datasources/item/item_datasource.dart';
 import 'package:flutter_dev_test/data/models/item_model.dart';
 import 'package:flutter_dev_test/utils/exceptions.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ItemRemoteDatasource extends ItemDatasource {
   @override
   Future<List<ItemModel>> fetchItems(
       int start, int limit, String nameFilter) async {
-    BaseOptions options =
-        BaseOptions(baseUrl: "http://jsonplaceholder.typicode.com");
+    BaseOptions options = BaseOptions(baseUrl: dotenv.env["SERVER_URL"]!);
     Dio dio = Dio(options);
     Map<String, dynamic> queryParams = {
       "_start": start,

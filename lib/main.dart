@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dev_test/injection.dart';
 import 'package:flutter_dev_test/presentation/blocs/item_list/item_list_bloc.dart';
 import 'package:flutter_dev_test/presentation/router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   inject();
   runApp(const MyApp());
 }
