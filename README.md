@@ -1,6 +1,6 @@
 # flutter_dev_test
 
-A Flutter project for testing purposes.
+A Flutter project for testing purposes.  
 It follows the clean architecture project structure and can be used as a template/model for a real world mobile application.
 
 ## Features
