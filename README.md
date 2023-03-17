@@ -1,6 +1,6 @@
 # flutter_dev_test
 
-A new Flutter project.
+A Flutter project for testing purposes.
 
 ## Features
 - Infinite scroll
