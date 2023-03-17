@@ -11,5 +11,5 @@ A new Flutter project.
 For simplicity, I have included a .env file in the repository, 
 which would not be a goog practice in a real world application.
 
-to run the application run in the cli the following command or just use you IDE 
+To run the application run the following command in your cli or just use you IDE.
 >flutter run
